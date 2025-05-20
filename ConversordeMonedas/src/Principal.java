@@ -1,3 +1,5 @@
+import com.google.gson.Gson;
+
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -10,8 +12,12 @@ public class Principal {
         Scanner introduce = new Scanner(System.in);
         int opcion = 0;
         double cantidad = 0;
+        String direccion = "https://v6.exchangerate-api.com/v6/e2a19d36011125e680507af6/pair/";
+
 
         while (opcion != 7) {
+
+
 
             System.out.println("***************************************");
             System.out.println("Sea Bienvenido al conversor de monedas");
@@ -30,17 +36,19 @@ public class Principal {
             try {
 
 
-                String direccion = "https://v6.exchangerate-api.com/v6/e2a19d36011125e680507af6/pair/";
-                HttpClient client = HttpClient.newHttpClient();
-                HttpRequest request = HttpRequest.newBuilder()
-                        .uri(URI.create(direccion))
-                        .build();
-//                   HttpResponse<String> response = client
-//                            .send(request, HttpResponse.BodyHandlers.ofString());
+//                HttpClient client = HttpClient.newHttpClient();
+//             HttpRequest request = HttpRequest.newBuilder().uri(URI.create(direccion)).build();
+//                  HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
 
                 opcion = introduce.nextInt();
-
+                //String monedas ="";
+                String dolares = "USD";
+                String pesosArgentinos = " ARS";
+                String realesBrasileños = "BRL";
+                String pesosMexicanos = "MXN";
+                String puesto1 = "";
+                String puesto2 = "";
 
                 switch (opcion) {
 
@@ -49,64 +57,77 @@ public class Principal {
                         System.out.println("Introduce la cantidad de Dolares que quieres convertir a Pesos Argentinos");
                         cantidad = introduce.nextDouble();
 
+                        direccion = direccion+"USD/ARS/"+cantidad;        //se crea el link de consulta para la API
 
-                        direccion = direccion+"/USD/ARS/"+cantidad;
+                        puesto1 = dolares;
+                        puesto2 = pesosArgentinos;
 
-                        System.out.println(cantidad+" USD son: "+" ARS");
                         break;
                     case 2:
                         System.out.println("Introduce la cantidad de Pesos Argentinos que quieres convertir a Dolares");
                         cantidad = introduce.nextDouble();
 
+                        direccion = direccion+"ARS/USD/"+cantidad;          //se crea el link de consulta para la API
 
-                        direccion = direccion+"/ARS/USD/"+cantidad;
-
-                        System.out.println(cantidad+" ARS son: "+ " USD");
+                        puesto1 = pesosArgentinos;
+                        puesto2 = dolares;
                         break;
                     case 3:
                         System.out.println("Introduce la cantidad de Dolares que quieres convertir a Reales Brasileños");
                         cantidad = introduce.nextDouble();
 
+                        direccion = direccion+"USD/BRL/"+cantidad;          //se crea el link de consulta para la API
 
-                        direccion = direccion+"/USD/BRL/"+cantidad;
-
-                        System.out.println(cantidad+" USD son: "+" BRL");
+                        puesto1 = dolares;
+                        puesto2 = realesBrasileños;
                         break;
                     case 4:
                         System.out.println("Introduce la cantidad de Reales Brasileños que quieres convertir a Dolares");
                         cantidad = introduce.nextDouble();
 
 
-                        direccion = direccion+"/BRL/USD/"+cantidad;
+                        direccion = direccion+"/BRL/USD/"+cantidad;         //se crea el link de consulta para la API
 
-                        System.out.println(cantidad+" BRL son: "+ " USD");
+                        puesto1 = realesBrasileños;
+                        puesto2 = dolares;
                         break;
                     case 5:
                         System.out.println("Introduce la cantidad de Dolares que quieres convertir a Pesos Mexicanos");
                         cantidad = introduce.nextDouble();
 
 
-                        direccion = direccion+"/USD/MXN/"+cantidad;
+                        direccion = direccion+"/USD/MXN/"+cantidad;         //se crea el link de consulta para la API
 
-                        System.out.println(cantidad+" USD son: "+ " MXN");
+                        puesto1 = dolares;
+                        puesto2 = pesosMexicanos;
                         break;
                     case 6:
                         System.out.println("Introduce la cantidad de Pesos Mexicanos que quieres convertir a Dolares");
                         cantidad = introduce.nextDouble();
 
 
-                        direccion = direccion+"/MXN/USD/"+cantidad;
+                        direccion = direccion+"/MXN/USD/"+cantidad;         //se crea el link de consulta para la API
 
-                        System.out.println(cantidad+" MXN son: "+ " USD");
+                        puesto1 = pesosMexicanos;
+                        puesto2 = dolares;
                         break;
                     case 7:
-                        System.out.println("Hasta Luego");
+                        System.out.println("Hasta Luego");          //finaliza el programa
                         break;
 
                     default:
                         System.out.println("\n¡Opción no válida! Por favor, elige un número del 1 al 7.");
 
+
                 }
+                HttpClient client = HttpClient.newHttpClient();
+                HttpRequest request = HttpRequest.newBuilder().uri(URI.create(direccion)).build();
+                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+                return new Gson().fromJson(response.body().Monedas.class);
+                //System.out.println(direccion);   // compruebo el link que se crea en los case
+
+                System.out.println(cantidad+" "+puesto1+" son: "+puesto2);
 
             } catch (Exception e) {
 
