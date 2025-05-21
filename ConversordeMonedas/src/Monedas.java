@@ -1,7 +1,4 @@
-public record Monedas(double conversion_rate,
-                      double conversion_result) {
-
-
+public record Monedas(String conversion_result) {
 
 
 }

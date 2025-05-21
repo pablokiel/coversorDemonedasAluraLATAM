@@ -12,12 +12,12 @@ public class Principal {
         Scanner introduce = new Scanner(System.in);
         int opcion = 0;
         double cantidad = 0;
-        String direccion = "https://v6.exchangerate-api.com/v6/e2a19d36011125e680507af6/pair/";
+        String direccion = "";
 
 
         while (opcion != 7) {
 
-
+            direccion = "https://v6.exchangerate-api.com/v6/e2a19d36011125e680507af6/pair/";
 
             System.out.println("***************************************");
             System.out.println("Sea Bienvenido al conversor de monedas");
@@ -120,18 +120,23 @@ public class Principal {
 
 
                 }
+
+                //System.out.println(direccion);   // compruebo el link que se crea en los case
+
+
                 HttpClient client = HttpClient.newHttpClient();
                 HttpRequest request = HttpRequest.newBuilder().uri(URI.create(direccion)).build();
                 HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-                return new Gson().fromJson(response.body().Monedas.class);
-                //System.out.println(direccion);   // compruebo el link que se crea en los case
+                Monedas monedas = new Gson().fromJson(response.body(), Monedas.class);
 
-                System.out.println(cantidad+" "+puesto1+" son: "+puesto2);
+                System.out.println(cantidad+" "+puesto1+" son: "+monedas.conversion_result()+" "+puesto2);
+
+
 
             } catch (Exception e) {
 
-                System.out.println("\nError: Debes ingresar un número válido. Intenta de nuevo\n");
+                System.out.println("\nError: Debes ingresar un número válido. Intenta de nuevo\n"+e);
                 introduce.nextLine();
 
 
